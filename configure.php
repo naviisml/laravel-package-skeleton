@@ -169,10 +169,6 @@ $className = ask('Class name', $className);
 $variableName = lcfirst($className);
 $description = ask('Package description', "This is my package {$packageSlug}");
 
-$usePhpStan = confirm('Enable PhpStan?', true);
-$useLaravelPint = confirm('Enable Laravel Pint?', true);
-$useDependabot = confirm('Enable Dependabot?', true);
-$useLaravelRay = confirm('Use Ray for debugging?', true);
 $useUpdateChangelogWorkflow = confirm('Use automatic changelog updater workflow?', true);
 
 writeln('------');
@@ -183,10 +179,6 @@ writeln("Namespace  : {$vendorNamespace}\\{$className}");
 writeln("Class name : {$className}");
 writeln('---');
 writeln('Packages & Utilities');
-writeln('Use Laravel/Pint       : '.($useLaravelPint ? 'yes' : 'no'));
-writeln('Use Larastan/PhpStan : '.($usePhpStan ? 'yes' : 'no'));
-writeln('Use Dependabot       : '.($useDependabot ? 'yes' : 'no'));
-writeln('Use Ray App          : '.($useLaravelRay ? 'yes' : 'no'));
 writeln('Use Auto-Changelog   : '.($useUpdateChangelogWorkflow ? 'yes' : 'no'));
 writeln('------');
 
@@ -226,31 +218,6 @@ foreach ($files as $file) {
         str_contains($file, 'README.md') => remove_readme_paragraphs($file),
         default => [],
     };
-}
-
-if (! $useLaravelPint) {
-    safeUnlink(__DIR__.'/.github/workflows/fix-php-code-style-issues.yml');
-    safeUnlink(__DIR__.'/pint.json');
-}
-
-if (! $usePhpStan) {
-    safeUnlink(__DIR__.'/phpstan.neon.dist');
-    safeUnlink(__DIR__.'/phpstan-baseline.neon');
-    safeUnlink(__DIR__.'/.github/workflows/phpstan.yml');
-
-    remove_composer_deps([
-        'phpstan/extension-installer',
-        'phpstan/phpstan-deprecation-rules',
-        'phpstan/phpstan-phpunit',
-        'nunomaduro/larastan',
-    ]);
-
-    remove_composer_script('phpstan');
-}
-
-if (! $useDependabot) {
-    safeUnlink(__DIR__.'/.github/dependabot.yml');
-    safeUnlink(__DIR__.'/.github/workflows/dependabot-auto-merge.yml');
 }
 
 if (! $useUpdateChangelogWorkflow) {
