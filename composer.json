@@ -17,7 +17,7 @@
     ],
     "require": {
         "php": "^8.0",
-        "naviisml/laravel-package": "^1.14.0",
+        "naviisml/laravel-package": "*",
         "illuminate/contracts": "^9.28|^10.0"
     },
     "autoload": {
